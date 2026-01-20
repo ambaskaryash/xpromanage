@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
-        AWS_CREDENTIALS = credentials('aws-credentials')
+        JWT_SECRET = credentials('jwt-secret')
         EC2_HOST = credentials('ec2-host')
         EC2_USER = 'ubuntu'
         DOCKER_IMAGE_CLIENT = 'ambaskaryash/xpromanage-client'
@@ -168,8 +168,6 @@ pipeline {
         }
         always {
             echo 'Cleaning up...'
-            sh 'docker logout'
-            cleanWs()
         }
     }
 }
