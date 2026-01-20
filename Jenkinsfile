@@ -6,8 +6,8 @@ pipeline {
         JWT_SECRET = credentials('jwt-secret')
         EC2_HOST = credentials('ec2-host')
         EC2_USER = 'ubuntu'
-        DOCKER_IMAGE_CLIENT = 'ambaskaryash/xpromanage-client'
-        DOCKER_IMAGE_SERVER = 'ambaskaryash/xpromanage-server'
+        DOCKER_IMAGE_CLIENT = 'yash119/xpromanage-client'
+        DOCKER_IMAGE_SERVER = 'yash119/xpromanage-server'
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
     
