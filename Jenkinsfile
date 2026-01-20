@@ -6,8 +6,8 @@ pipeline {
         AWS_CREDENTIALS = credentials('aws-credentials')
         EC2_HOST = credentials('ec2-host')
         EC2_USER = 'ubuntu'
-        DOCKER_IMAGE_CLIENT = 'yourusername/xpromanage-client'
-        DOCKER_IMAGE_SERVER = 'yourusername/xpromanage-server'
+        DOCKER_IMAGE_CLIENT = 'ambaskaryash/xpromanage-client'
+        DOCKER_IMAGE_SERVER = 'ambaskaryash/xpromanage-server'
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
     
