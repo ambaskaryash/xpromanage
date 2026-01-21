@@ -13,8 +13,15 @@ dotenv.config();
 // Connect to database
 connectDB();
 
+const http = require('http');
+const { initializeSocket } = require('./config/socket');
+
 // Initialize express app
 const app = express();
+const server = http.createServer(app);
+
+// Initialize Socket.IO
+const io = initializeSocket(server);
 
 // Middleware
 app.use(helmet()); // Security headers
@@ -35,6 +42,12 @@ if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
+// Make io accessible in request
+app.use((req, res, next) => {
+    req.io = io;
+    next();
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
     res.status(200).json({
@@ -49,6 +62,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/projects', require('./routes/projects'));
 app.use('/api/tasks', require('./routes/tasks'));
 app.use('/api/users', require('./routes/users'));
+app.use('/api/activities', require('./routes/activities'));
 
 // Root endpoint
 app.get('/', (req, res) => {
@@ -71,7 +85,7 @@ app.use(errorHandler);
 
 // Start server
 const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(
         `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
     );
@@ -83,4 +97,4 @@ process.on('unhandledRejection', (err, promise) => {
     server.close(() => process.exit(1));
 });
 
-module.exports = app;
+module.exports = { app, server };

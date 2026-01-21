@@ -64,6 +64,28 @@ const ProjectSchema = new mongoose.Schema({
         max: 100,
         default: 0
     },
+    // Kanban Board Configuration
+    boardConfig: {
+        columns: {
+            type: [{
+                id: String,
+                name: String,
+                color: String,
+                limit: Number, // WIP limit
+                position: Number
+            }],
+            default: [
+                { id: 'todo', name: 'To Do', color: '#e2e8f0', limit: 0, position: 0 },
+                { id: 'in-progress', name: 'In Progress', color: '#3b82f6', limit: 0, position: 1 },
+                { id: 'review', name: 'Review', color: '#f59e0b', limit: 0, position: 2 },
+                { id: 'completed', name: 'Completed', color: '#10b981', limit: 0, position: 3 }
+            ]
+        },
+        swimlanes: {
+            enabled: { type: Boolean, default: false },
+            groupBy: { type: String, enum: ['priority', 'assignee', 'none'], default: 'none' }
+        }
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -81,7 +103,7 @@ ProjectSchema.pre('save', function (next) {
 });
 
 // Cascade delete tasks when a project is deleted
-ProjectSchema.pre('remove', async function (next) {
+ProjectSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
     await this.model('Task').deleteMany({ project: this._id });
     next();
 });

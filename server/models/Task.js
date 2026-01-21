@@ -54,11 +54,76 @@ const TaskSchema = new mongoose.Schema({
     attachments: [{
         name: String,
         url: String,
+        key: String, // S3 key for deletion
+        size: Number,
+        type: String,
+        uploadedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
         uploadedAt: {
             type: Date,
             default: Date.now
         }
     }],
+    // Kanban Board fields
+    boardColumn: {
+        type: String,
+        default: 'todo'
+    },
+    boardPosition: {
+        type: Number,
+        default: 0
+    },
+    swimlane: {
+        type: String // priority, assignee, or custom
+    },
+    // Gantt Chart fields
+    dependencies: [{
+        task: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Task'
+        },
+        type: {
+            type: String,
+            enum: ['FS', 'SS', 'FF', 'SF'], // Finish-to-Start, Start-to-Start, Finish-to-Finish, Start-to-Finish
+            default: 'FS'
+        },
+        lag: {
+            type: Number,
+            default: 0 // in days
+        }
+    }],
+    duration: {
+        type: Number, // in days
+        default: 1
+    },
+    progress: {
+        type: Number,
+        min: 0,
+        max: 100,
+        default: 0
+    },
+    startDate: {
+        type: Date
+    },
+    // Calendar fields
+    isMilestone: {
+        type: Boolean,
+        default: false
+    },
+    isRecurring: {
+        type: Boolean,
+        default: false
+    },
+    recurrenceRule: {
+        type: String // RRULE format
+    },
+    // Activity tracking
+    lastModifiedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     comments: [{
         user: {
             type: mongoose.Schema.Types.ObjectId,

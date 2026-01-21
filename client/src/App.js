@@ -101,11 +101,15 @@ function AppContent() {
     );
 }
 
+import { SocketProvider } from './context/SocketContext';
+
 function App() {
     return (
         <Router>
             <AuthProvider>
-                <AppContent />
+                <SocketProvider>
+                    <AppContent />
+                </SocketProvider>
             </AuthProvider>
         </Router>
     );

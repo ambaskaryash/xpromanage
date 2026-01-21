@@ -116,36 +116,59 @@ code {
   padding: 0 var(--spacing-lg);
 }
 
-.flex {
-  display: flex;
-}
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.flex-1 { flex: 1 1 0%; }
+.flex-shrink-0 { flex-shrink: 0; }
 
-.flex-col {
-  flex-direction: column;
-}
+.grid { display: grid; }
+.grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.gap-6 { gap: 1.5rem; }
 
-.items-center {
-  align-items: center;
-}
+.mb-4 { margin-bottom: 1rem; }
+.mt-1 { margin-top: 0.25rem; }
+.mt-0\.5 { margin-top: 0.125rem; }
+.p-3 { padding: 0.75rem; }
+.p-4 { padding: 1rem; }
+.space-y-4 > * + * { margin-top: 1rem; }
+.space-x-3 > * + * { margin-left: 0.75rem; }
 
-.justify-center {
-  justify-content: center;
-}
+.rounded-lg { border-radius: 0.5rem; }
 
-.justify-between {
-  justify-content: space-between;
-}
+/* Text Colors */
+.text-xs { font-size: 0.75rem; line-height: 1rem; }
+.text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.italic { font-style: italic; }
 
-.gap-sm {
-  gap: var(--spacing-sm);
-}
+.text-gray-400 { color: #9ca3af; }
+.text-gray-500 { color: #6b7280; }
+.text-gray-800 { color: #1f2937; }
+.text-gray-900 { color: #111827; }
+.text-center { text-align: center; }
 
-.gap-md {
-  gap: var(--spacing-md);
-}
+.text-green-500 { color: #10b981; }
+.text-green-600 { color: #059669; }
+.text-blue-500 { color: #3b82f6; }
+.text-red-500 { color: #ef4444; }
+.text-purple-500 { color: #8b5cf6; }
+.text-orange-500 { color: #f97316; }
 
-.gap-lg {
-  gap: var(--spacing-lg);
+.bg-gray-50 { background-color: rgba(249, 250, 251, 0.05); }
+.hover\:bg-gray-50:hover { background-color: rgba(249, 250, 251, 0.1); }
+.transition-colors { transition: background-color 0.2s, color 0.2s; }
+
+/* Responsive Grid */
+@media (min-width: 1024px) {
+  .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .lg\:col-span-2 { grid-column: span 2 / span 2; }
+  .lg\:col-span-1 { grid-column: span 1 / span 1; }
 }
 
 /* ===== CARD COMPONENT ===== */

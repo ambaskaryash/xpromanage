@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { projectsAPI, tasksAPI } from '../services/api';
 import { FiUsers, FiCalendar, FiDollarSign, FiCheckSquare } from 'react-icons/fi';
+import ActivityFeed from '../components/ActivityFeed';
 import './Dashboard.css';
 
 const ProjectDetails = () => {
@@ -111,28 +112,39 @@ const ProjectDetails = () => {
                     </div>
                 </div>
 
-                <div className="dashboard-section fade-in">
-                    <div className="section-header">
-                        <h2 className="section-title">Tasks</h2>
-                        <button className="btn btn-primary btn-sm">Add Task</button>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-2">
+                        <div className="dashboard-section fade-in">
+                            <div className="section-header">
+                                <h2 className="section-title">Tasks</h2>
+                                <button className="btn btn-primary btn-sm">Add Task</button>
+                            </div>
+
+                            <div className="tasks-list">
+                                {tasks.length > 0 ? (
+                                    tasks.map((task) => (
+                                        <div key={task._id} className="task-item">
+                                            <div className="task-content">
+                                                <h4 className="task-title">{task.title}</h4>
+                                                <p className="task-project">{task.description}</p>
+                                            </div>
+                                            <div className="task-badges">
+                                                <span className={getStatusBadge(task.status)}>{task.status}</span>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="empty-state">No tasks yet. Create your first task!</p>
+                                )}
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="tasks-list">
-                        {tasks.length > 0 ? (
-                            tasks.map((task) => (
-                                <div key={task._id} className="task-item">
-                                    <div className="task-content">
-                                        <h4 className="task-title">{task.title}</h4>
-                                        <p className="task-project">{task.description}</p>
-                                    </div>
-                                    <div className="task-badges">
-                                        <span className={getStatusBadge(task.status)}>{task.status}</span>
-                                    </div>
-                                </div>
-                            ))
-                        ) : (
-                            <p className="empty-state">No tasks yet. Create your first task!</p>
-                        )}
+                    <div className="lg:col-span-1">
+                        <div className="dashboard-section fade-in">
+                            <h2 className="section-title mb-4">Recent Activity</h2>
+                            <ActivityFeed projectId={id} />
+                        </div>
                     </div>
                 </div>
             </div>

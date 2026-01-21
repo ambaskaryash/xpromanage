@@ -65,6 +65,22 @@ export const tasksAPI = {
     update: (id, data) => api.put(`/tasks/${id}`, data),
     delete: (id) => api.delete(`/tasks/${id}`),
     addComment: (id, data) => api.post(`/tasks/${id}/comments`, data),
+    updatePosition: (id, data) => api.put(`/tasks/${id}/position`, data),
+    uploadAttachment: (id, file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        return api.post(`/tasks/${id}/attachments`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+    },
+    deleteAttachment: (id, fileId) => api.delete(`/tasks/${id}/attachments/${fileId}`)
+};
+
+// Activities API
+export const activitiesAPI = {
+    getAll: (params) => api.get('/activities', { params }),
+    getProjectActivities: (projectId, params) => api.get(`/activities/project/${projectId}`, { params }),
+    getUserActivities: (userId, params) => api.get(`/activities/user/${userId}`, { params })
 };
 
 // Users API
