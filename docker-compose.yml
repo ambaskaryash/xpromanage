@@ -25,13 +25,8 @@ services:
       dockerfile: Dockerfile
     container_name: xpromanage-server
     restart: unless-stopped
-    environment:
-      NODE_ENV: production
-      PORT: 5000
-      MONGODB_URI: mongodb://admin:admin123@mongo:27017/xpromanage?authSource=admin
-      JWT_SECRET: your-super-secret-jwt-key-change-in-production
-      JWT_EXPIRE: 7d
-      CORS_ORIGIN: http://localhost:3000
+    env_file:
+      - ./server/.env
     ports:
       - "5000:5000"
     depends_on:
@@ -50,8 +45,9 @@ services:
       dockerfile: Dockerfile
     container_name: xpromanage-client
     restart: unless-stopped
+    env_file:
+      - ./client/.env
     environment:
-      REACT_APP_API_URL: http://localhost:5000/api
       CHOKIDAR_USEPOLLING: "true"
     ports:
       - "3000:3000"
