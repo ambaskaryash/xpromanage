@@ -18,8 +18,13 @@ const app = express();
 
 // Middleware
 app.use(helmet()); // Security headers
+
+// CORS configuration
+const corsOrigin = process.env.CORS_ORIGIN || 'http://localhost:3000';
+console.log(`CORS Origin configured as: ${corsOrigin}`.cyan.bold);
+
 app.use(cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    origin: corsOrigin,
     credentials: true
 }));
 app.use(express.json()); // Body parser
