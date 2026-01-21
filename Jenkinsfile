@@ -28,6 +28,9 @@ pipeline {
                     echo "MONGODB_URI=mongodb://admin:admin123@mongo:27017/xpromanage?authSource=admin" >> server/.env
                     echo "JWT_SECRET=${JWT_SECRET}" >> server/.env
                     echo "JWT_EXPIRE=7d" >> server/.env
+                    echo "CORS_ORIGIN=http://${EC2_HOST}:3000" >> server/.env
+                    
+                    echo "REACT_APP_API_URL=http://${EC2_HOST}:5000/api" > client/.env
                 '''
             }
         }
