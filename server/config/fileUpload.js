@@ -76,6 +76,22 @@ const uploadToS3 = async (file, folder = 'attachments') => {
 
 // Delete file from S3
 const deleteFromS3 = async (key) => {
+    // Security: Validate the key to prevent path traversal attacks
+    if (!key || typeof key !== 'string') {
+        throw new Error('Invalid file key');
+    }
+
+    // Prevent path traversal attempts
+    if (key.includes('..') || key.includes('//') || key.startsWith('/')) {
+        throw new Error('Invalid file key: path traversal detected');
+    }
+
+    // Ensure the key matches expected pattern (folder/uuid.extension)
+    const validKeyPattern = /^[a-zA-Z0-9_-]+\/[a-f0-9-]+\.[a-zA-Z0-9]+$/;
+    if (!validKeyPattern.test(key)) {
+        throw new Error('Invalid file key format');
+    }
+
     const params = {
         Bucket: process.env.AWS_S3_BUCKET,
         Key: key

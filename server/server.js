@@ -14,11 +14,30 @@ dotenv.config();
 connectDB();
 
 const http = require('http');
+const https = require('https');
+const fs = require('fs');
 const { initializeSocket } = require('./config/socket');
 
 // Initialize express app
 const app = express();
-const server = http.createServer(app);
+
+// Create server (HTTPS in production if certificates are available, HTTP otherwise)
+let server;
+if (process.env.NODE_ENV === 'production' && process.env.SSL_KEY_PATH && process.env.SSL_CERT_PATH) {
+    // Production: Use HTTPS if SSL certificates are configured
+    const httpsOptions = {
+        key: fs.readFileSync(process.env.SSL_KEY_PATH),
+        cert: fs.readFileSync(process.env.SSL_CERT_PATH)
+    };
+    server = https.createServer(httpsOptions, app);
+    console.log('Server configured with HTTPS'.green.bold);
+} else {
+    // Development: Use HTTP (acceptable for local development)
+    server = http.createServer(app);
+    if (process.env.NODE_ENV === 'production') {
+        console.warn('WARNING: Running in production mode without HTTPS. Set SSL_KEY_PATH and SSL_CERT_PATH environment variables.'.yellow.bold);
+    }
+}
 
 // Initialize Socket.IO
 const io = initializeSocket(server);

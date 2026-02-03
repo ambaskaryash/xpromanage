@@ -152,10 +152,10 @@ exports.updateTask = async (req, res, next) => {
 
         // Determine changes for activity log
         const changes = {};
-        if (req.body.status && req.body.status !== previousState.status) changes.status = { from: previousState.status, to: req.body.status };
-        if (req.body.priority && req.body.priority !== previousState.priority) changes.priority = { from: previousState.priority, to: req.body.priority };
-        if (req.body.assignedTo && req.body.assignedTo.toString() !== (previousState.assignedTo ? previousState.assignedTo.toString() : '')) changes.assignedTo = req.body.assignedTo;
-        if (req.body.boardColumn && req.body.boardColumn !== task.boardColumn) changes.moved = true;
+        if (req.body.status && typeof req.body.status === 'string' && req.body.status !== previousState.status) changes.status = { from: previousState.status, to: req.body.status };
+        if (req.body.priority && typeof req.body.priority === 'string' && req.body.priority !== previousState.priority) changes.priority = { from: previousState.priority, to: req.body.priority };
+        if (req.body.assignedTo && typeof req.body.assignedTo === 'string' && req.body.assignedTo.toString() !== (previousState.assignedTo ? previousState.assignedTo.toString() : '')) changes.assignedTo = req.body.assignedTo;
+        if (req.body.boardColumn && typeof req.body.boardColumn === 'string' && req.body.boardColumn !== task.boardColumn) changes.moved = true;
 
         // Log activity
         if (Object.keys(changes).length > 0) {
@@ -253,6 +253,14 @@ exports.addComment = async (req, res, next) => {
             });
         }
 
+        // Validate comment text type and content
+        if (!req.body.text || typeof req.body.text !== 'string') {
+            return res.status(400).json({
+                success: false,
+                message: 'Comment text must be a valid string'
+            });
+        }
+
         const comment = {
             user: req.user.id,
             text: req.body.text
@@ -266,7 +274,8 @@ exports.addComment = async (req, res, next) => {
 
         const newComment = task.comments[task.comments.length - 1];
 
-        // Log activity
+        // Log activity - safely handle text substring
+        const commentText = String(req.body.text);
         await Activity.logActivity({
             user: req.user.id,
             action: 'commented',
@@ -274,7 +283,7 @@ exports.addComment = async (req, res, next) => {
             entityId: task._id,
             entityName: task.title,
             project: task.project,
-            changes: { text: req.body.text.substring(0, 50) + (req.body.text.length > 50 ? '...' : '') }
+            changes: { text: commentText.substring(0, 50) + (commentText.length > 50 ? '...' : '') }
         });
 
         // Emit socket event
