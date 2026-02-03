@@ -1,5 +1,5 @@
 # Build stage
-FROM node:18-alpine AS builder
+FROM node:25.5.0-alpine AS builder
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ COPY package*.json ./
 RUN npm install --only=production
 
 # Production stage
-FROM node:18-alpine
+FROM node:25.5.0-alpine
 
 WORKDIR /app
 
