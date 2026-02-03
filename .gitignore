@@ -64,3 +64,7 @@ SECURITY_SUMMARY.md
 DOCKER_SECURITY_AUDIT.md
 DOCKER_SECURITY_SUMMARY.md
 DOCKER_SETUP_GUIDE.md
+.agent/artifacts/security_audit_report.md
+.agent/artifacts/security_fixes_implementation.md
+.agent/artifacts/security_quick_reference.md
+.agent/artifacts/security_review_summary.md
